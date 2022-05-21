@@ -1,3 +1,4 @@
+import re
 from django.shortcuts import render
 
 def indexView(request):
@@ -167,18 +168,19 @@ def state18(input):
     else:
         state = 100
     return state
-# done until 18
+
 
 def state19(input):
-    if (input == 't'):
-        state = 13
-    else:
-        state = 100
+    if (input):
+        if (input == 'e'):
+            state = 20
+        else:
+            state = 100  
     return state
 
 
 def state20(input):
-    if (input == 'n'):
+    if (input == 'e'):
         state = 21
     else:
         state = 100
@@ -186,9 +188,7 @@ def state20(input):
 
 
 def state21(input):
-    if (input == 'c'):
-        state = 22
-    else:
+    if(input):
         state = 100
     return state
 
@@ -208,15 +208,19 @@ def state23(input):
 
 
 def state24(input):
-    if (input == 'c'):
+    if (input == 'a'):
         state = 25
+    elif (input == 'p'):
+        state = 28
+    elif (input == 'i'):
+        state = 30
     else:
         state = 100
     return state
 
 
 def state25(input):
-    if (input == 'a'):
+    if (input == 's'):
         state = 26
     else:
         state = 100
@@ -224,7 +228,7 @@ def state25(input):
 
 
 def state26(input):
-    if (input == 'u'):
+    if (input == 's'):
         state = 27
     else:
         state = 100
@@ -232,288 +236,97 @@ def state26(input):
 
 
 def state27(input):
-    if (input == 's'):
-        state = 22
-    else:
+    if (input):
         state = 100
     return state
 
 
-def state28(c):
-    if (c == 'n'):
+def state28(input):
+    if (input == 'm'):
         state = 29
     else:
         state = 100
     return state
 
 
-def state29(c):
-    if (c == 'l'):
-        state = 38
-    elif(c == 't'):
-        state = 30
-    else:
+def state29(input):
+    if (input):
         state = 100
     return state
 
 
-def state30(c):
-    if (c == 'i'):
+def state30(input):
+    if (input == 'm'):
         state = 31
+    elif (input == 'r'):
+        state = 36
     else:
         state = 100
     return state
 
 
-def state31(c):
-    if (c == 'l'):
+def state31(input):
+    if (input == 'l'):
         state = 32
     else:
         state = 100
     return state
 
 
-def state32(c):
-    if (c):
+def state32(input):
+    if (input == 'b'):
+        state = 33
+    else:
         state = 100
     return state
 
 
-def state33(c):
-    if (c == 't'):
+def state33(input):
+    if (input == 'd'):
         state = 34
     else:
         state = 100
     return state
 
 
-def state34(c):
-    if (c == 'e'):
-        state = 1
+def state34(input):
+    if (input == 'e'):
+        state = 35
     else:
         state = 100
     return state
 
 
-def state35(c):
-    if (c):
+def state35(input):
+    if (input):
         state = 100
     return state
-    # if (c == 'e'):
-    #     state = 1
-    # else:
-    #     state = 100
-    # return state
 
 
-def state36(c):
-    if (c == 'f'):
+def state36(input):
+    if (input == 'm'):
         state = 37
     else:
         state = 100
     return state
 
 
-def state37(c):
-    if (c):
-        state = 100
-    return state
-
-
-def state38(c):
-    if (c == 'e'):
-        state = 39
+def state37(input):
+    if (input == 'e'):
+        state = 38
     else:
         state = 100
     return state
 
 
-def state39(c):
-    if (c == 's'):
-        state = 40
-    else:
+def state38(input):
+    if (input):
         state = 100
     return state
 
 
-def state40(c):
-    if (c == 's'):
-        state = 41
-    else:
-        state = 100
-    return state
-
-
-def state41(c):
-    if (c):
-        state = 100
-    return state
-
-
-def state42(c):
-    if (c == 'i'):
-        state = 43
-    else:
-        state = 100
-    return state
-
-
-def state43(c):
-    if (c == 't'):
-        state = 44
-    else:
-        state = 100
-    return state
-
-
-def state44(c):
-    if (c == 'h'):
-        state = 34
-    else:
-        state = 100
-    return state
-
-
-def state45(c):
-    if (c == 'o'):
-        state = 1
-    elif (c == 'e'):
-        state = 42
-    else:
-        state = 100
-    return state
-
-
-def state46(c):
-    if (c == 'h'):
-        state = 47
-    else:
-        state = 100
-    return state
-
-
-def state47(c):
-    if (c == 'e'):
-        state = 48
-    elif(c == 'o'):
-        state = 52
-    elif(c == 'i'):
-        state = 54
-    else:
-        state = 100
-    return state
-
-
-def state48(c):
-    if (c == 't'):
-        state = 49
-    elif(c == 'r'):
-        state = 50
-    elif(c == 'n'):
-        state = 52
-    else:
-        state = 100
-    return state
-
-
-def state49(c):
-    if (c == 'h'):
-        state = 34
-    else:
-        state = 100
-    return state
-
-
-def state50(c):
-    if (c == 'e'):
-        state = 51
-    else:
-        state = 100
-    return state
-
-
-def state51(c):
-    if (c == 'v'):
-        state = 34
-    elif(c == 'a'):
-        state = 40
-    elif(c):
-        state = 100
-    return state
-
-
-def state52(c):
-    if (c == 'm'):
-        state = 55
-    elif(c == 'e'):
-        state = 53
-    elif(c == 's'):
-        state = 22
-    elif(c):
-        state = 100
-    return state
-
-
-def state53(c):
-    if (c == 'v'):
-        state = 34
-    else:
-        state = 100
-    return state
-
-
-def state54(c):
-    if (c == 'l'):
-        state = 22
-    elif(c == 'c'):
-        state = 56
-    else:
-        state = 100
-    return state
-
-
-def state55(c):
-    if (c == 'e'):
-        state = 53
-    elif(c):
-        state = 100
-    return state
-
-
-def state56(c):
-    if (c == 'h'):
-        state = 57
-    else:
-        state = 100
-    return state
-
-
-def state57(c):
-    if (c == 'e'):
-        state = 53
-    elif(c):
-        state = 100
-    return state
-
-
-def state58(c):
-    if(c == 't'):
-        state = 59
-    elif(c == 'n'):
-        state = 60
-    else:
-        state = 100
-    return state
-
-
-def state59(c):
-    if(c):
-        state = 100
-    return state
-
-
-def state60(c):
-    if(c):
+def state100(input): # trap state
+    if(input):
         state = 100
     return state
 
@@ -522,7 +335,7 @@ def split(string):
     return string.split(" ")
 
 
-def DFA(data):
+def processDFA(data):
     finalOutput = list()
     outputDict = dict()
     # Preprocessing the strings
@@ -545,15 +358,14 @@ def DFA(data):
 
         tempList = list()
 
-        acceptingStates = [2, 6, 9, 12, 18, 23,
-                           32, 35, 37, 41, 51, 52, 55, 57, 59, 60]
+        acceptStates = [5, 14, 16, 19, 21, 23, 27, 29, 35, 38]
 
         for word in flattenedList:
             currentState = 0
             for char in word:
                 char = char.casefold()
-                # if(re.match(r'[~`!@#$%^&()_={}[\]:;,.<>+\/?-]', char) and (currentState == 0 or currentState in acceptingStates)):
-                #     continue
+                if(re.match(r'[~`!@#$%^&()_={}[\]:;,.<>+\/?-]', char) and (currentState == 0 or currentState in acceptStates)):
+                    continue
 
                 # DFA starts here
                 if (currentState == 0):
@@ -634,54 +446,12 @@ def DFA(data):
                     currentState = state37(char)
                 elif (currentState == 38):
                     currentState = state38(char)
-                elif (currentState == 39):
-                    currentState = state39(char)
-                elif (currentState == 40):
-                    currentState = state40(char)
-                elif (currentState == 41):
-                    currentState = state41(char)
-                elif (currentState == 42):
-                    currentState = state42(char)
-                elif (currentState == 43):
-                    currentState = state43(char)
-                elif (currentState == 44):
-                    currentState = state44(char)
-                elif (currentState == 45):
-                    currentState = state45(char)
-                elif (currentState == 46):
-                    currentState = state46(char)
-                elif (currentState == 47):
-                    currentState = state47(char)
-                elif (currentState == 48):
-                    currentState = state48(char)
-                elif (currentState == 49):
-                    currentState = state49(char)
-                elif (currentState == 50):
-                    currentState = state50(char)
-                elif (currentState == 51):
-                    currentState = state51(char)
-                elif (currentState == 52):
-                    currentState = state52(char)
-                elif (currentState == 53):
-                    currentState = state53(char)
-                elif (currentState == 54):
-                    currentState = state54(char)
-                elif (currentState == 55):
-                    currentState = state55(char)
-                elif (currentState == 56):
-                    currentState = state56(char)
-                elif (currentState == 57):
-                    currentState = state57(char)
-                elif (currentState == 58):
-                    currentState = state58(char)
-                elif (currentState == 59):
-                    currentState = state59(char)
-                elif (currentState == 60):
-                    currentState = state60(char)
+                elif (currentState == 100):
+                    currentState = state100(char)
 
             coorConj = ['for', 'and', 'nor', 'but', 'or', 'yet', 'so']
 
-            if (currentState in acceptingStates):
+            if (currentState in acceptStates):
                 matchedGroup = re.match(
                     r'(|[~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)(\w+)(|[ ~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)', word)
                 matchedWord = matchedGroup.group(2)
@@ -713,6 +483,6 @@ def DFA(data):
 def dfa_api(data):
     splitData = data.split('\n')
     splitData = [data + "\n" for data in splitData]
-    finalOutput, outputDict = DFA(splitData)
+    finalOutput, outputDict = processDFA(splitData)
     # writeFile(finalOutput, outputDict, len(outputDict))
     return True
