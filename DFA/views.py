@@ -4,11 +4,11 @@ from django.shortcuts import render
 def indexView(request):
     return render(request, 'index.html')
 
-# This function is for the dfa = starting
-# dfa = state (zeroth) of DFA
-def start(input):
+def state0(input):
     if (input == 'i'):
         state = 1
+    elif (input == 'e'):
+        state = 40
     else:
         state = 100 # state 100 serves as the trap state
     return state
@@ -34,7 +34,7 @@ def state2(input):
     elif (input == 'c'):
         state = 17
     elif (input == 'a'):
-        state = 24
+        state = 25
     else:
         state = 100
     return state
@@ -92,7 +92,7 @@ def state9(input):
     if (input == 'a'):
         state = 10
     elif (input == 'm'):
-        state = 25
+        state = 26
     else:
         state = 100
     return state
@@ -165,6 +165,10 @@ def state17(input):
 def state18(input):
     if (input == 'p'):
         state = 19
+    elif (input == 'n'):
+        state = 4
+    elif (input == 'i'):
+        state = 22
     else:
         state = 100
     return state
@@ -175,7 +179,7 @@ def state19(input):
         if (input == 'e'):
             state = 20
         else:
-            state = 100  
+            state = 100
     return state
 
 
@@ -203,25 +207,26 @@ def state22(input):
 
 def state23(input):
     if (input):
-        state = 100
+        if (input == 'e'):
+            state = 24
+        else:
+            state = 100  
     return state
 
 
 def state24(input):
-    if (input == 'a'):
-        state = 25
-    elif (input == 'p'):
-        state = 28
-    elif (input == 'i'):
-        state = 30
-    else:
+    if(input):
         state = 100
     return state
 
 
 def state25(input):
-    if (input == 's'):
+    if (input == 'a'):
         state = 26
+    elif (input == 'p'):
+        state = 29
+    elif (input == 'i'):
+        state = 31
     else:
         state = 100
     return state
@@ -236,45 +241,45 @@ def state26(input):
 
 
 def state27(input):
-    if (input):
+    if (input == 's'):
+        state = 28
+    else:
         state = 100
     return state
 
 
 def state28(input):
-    if (input == 'm'):
-        state = 29
-    else:
-        state = 100
-    return state
-
-
-def state29(input):
     if (input):
         state = 100
     return state
 
 
-def state30(input):
+def state29(input):
     if (input == 'm'):
-        state = 31
-    elif (input == 'r'):
-        state = 36
+        state = 30
     else:
         state = 100
     return state
 
 
+def state30(input):
+    if (input):
+        state = 100
+    return state
+
+
 def state31(input):
-    if (input == 'l'):
+    if (input == 'm'):
         state = 32
+    elif (input == 'r'):
+        state = 37
     else:
         state = 100
     return state
 
 
 def state32(input):
-    if (input == 'b'):
+    if (input == 'l'):
         state = 33
     else:
         state = 100
@@ -282,7 +287,7 @@ def state32(input):
 
 
 def state33(input):
-    if (input == 'd'):
+    if (input == 'b'):
         state = 34
     else:
         state = 100
@@ -290,7 +295,7 @@ def state33(input):
 
 
 def state34(input):
-    if (input == 'e'):
+    if (input == 'd'):
         state = 35
     else:
         state = 100
@@ -298,21 +303,21 @@ def state34(input):
 
 
 def state35(input):
-    if (input):
-        state = 100
-    return state
-
-
-def state36(input):
-    if (input == 'm'):
-        state = 37
+    if (input == 'e'):
+        state = 36
     else:
         state = 100
     return state
 
 
+def state36(input):
+    if (input):
+        state = 100
+    return state
+
+
 def state37(input):
-    if (input == 'e'):
+    if (input == 'm'):
         state = 38
     else:
         state = 100
@@ -320,6 +325,148 @@ def state37(input):
 
 
 def state38(input):
+    if (input == 'e'):
+        state = 39
+    else:
+        state = 100
+    return state
+
+
+def state39(input):
+    if (input):
+        state = 100
+    return state
+
+
+def state40(input):
+    if (input == 'u'):
+        state = 41
+    else:
+        state = 100
+    return state
+
+
+def state41(input):
+    if (input == 'i'):
+        state = 42
+    elif (input == 'c'):
+        state = 54
+    else:
+        state = 100
+    return state
+
+
+def state42(input):
+    if (input == 'c'):
+        state = 43
+    elif (input == 'w'):
+        state = 50
+    else:
+        state = 100
+    return state
+
+
+def state43(input):
+    if (input == 'n'):
+        state = 44
+    elif (input == '3'):
+        state = 46
+    else:
+        state = 100
+    return state
+
+
+def state44(input):
+    if (input == 'b'):
+        state = 45
+    else:
+        state = 100
+    return state
+
+
+def state45(input):
+    if (input):
+        state = 100
+    return state
+
+
+def state46(input):
+    if (input == 'b'):
+        state = 47
+    else:
+        state = 100
+    return state
+
+
+def state47(input):
+    if (input == 'c'):
+        state = 48
+    else:
+        state = 100
+    return state
+
+
+def state49(input):
+    if (input):
+        state = 100
+    return state
+
+
+def state50(input):
+    if (input == 'n'):
+        state = 51
+    else:
+        state = 100
+    return state
+
+
+def state51(input):
+    if (input == 'm'):
+        state = 52
+    else:
+        state = 100
+    return state
+
+
+def state52(input):
+    if (input == 'c'):
+        state = 53
+    else:
+        state = 100
+    return state
+
+
+def state53(input):
+    if (input):
+        state = 100
+    return state
+
+
+def state54(input):
+    if (input == 'e'):
+        state = 55
+    else:
+        state = 100
+    return state
+
+
+def state55(input):
+    if (input == 'l'):
+        state = 56
+    else:
+        state = 100
+    return state
+
+
+def state56(input):
+    if (input == 's'):
+        state = 57
+    else:
+        state = 100
+    return state
+
+
+def state57(input):
     if (input):
         state = 100
     return state
@@ -368,107 +515,21 @@ def processDFA(data):
                     continue
 
                 # DFA starts here
-                if (currentState == 0):
-                    currentState = start(char)
-                elif (currentState == 1):
-                    currentState = state1(char)
-                elif (currentState == 2):
-                    currentState = state2(char)
-                elif (currentState == 3):
-                    currentState = state3(char)
-                elif (currentState == 4):
-                    currentState = state4(char)
-                elif (currentState == 5):
-                    currentState = state5(char)
-                elif (currentState == 6):
-                    currentState = state6(char)
-                elif (currentState == 7):
-                    currentState = state7(char)
-                elif (currentState == 8):
-                    currentState = state8(char)
-                elif (currentState == 9):
-                    currentState = state9(char)
-                elif (currentState == 10):
-                    currentState = state10(char)
-                elif (currentState == 11):
-                    currentState = state11(char)
-                elif (currentState == 12):
-                    currentState = state12(char)
-                elif (currentState == 13):
-                    currentState = state13(char)
-                elif (currentState == 14):
-                    currentState = state14(char)
-                elif (currentState == 15):
-                    currentState = state15(char)
-                elif (currentState == 16):
-                    currentState = state16(char)
-                elif (currentState == 17):
-                    currentState = state17(char)
-                elif (currentState == 18):
-                    currentState = state18(char)
-                elif (currentState == 19):
-                    currentState = state19(char)
-                elif (currentState == 20):
-                    currentState = state20(char)
-                elif (currentState == 21):
-                    currentState = state21(char)
-                elif (currentState == 22):
-                    currentState = state22(char)
-                elif (currentState == 23):
-                    currentState = state23(char)
-                elif (currentState == 24):
-                    currentState = state24(char)
-                elif (currentState == 25):
-                    currentState = state25(char)
-                elif (currentState == 26):
-                    currentState = state26(char)
-                elif (currentState == 27):
-                    currentState = state27(char)
-                elif (currentState == 28):
-                    currentState = state28(char)
-                elif (currentState == 29):
-                    currentState = state29(char)
-                elif (currentState == 30):
-                    currentState = state30(char)
-                elif (currentState == 31):
-                    currentState = state31(char)
-                elif (currentState == 32):
-                    currentState = state32(char)
-                elif (currentState == 33):
-                    currentState = state33(char)
-                elif (currentState == 34):
-                    currentState = state34(char)
-                elif (currentState == 35):
-                    currentState = state35(char)
-                elif (currentState == 36):
-                    currentState = state36(char)
-                elif (currentState == 37):
-                    currentState = state37(char)
-                elif (currentState == 38):
-                    currentState = state38(char)
-                elif (currentState == 100):
-                    currentState = state100(char)
-
-            coorConj = ['for', 'and', 'nor', 'but', 'or', 'yet', 'so']
+                currentState = locals()['state' + str(currentState)]()
 
             if (currentState in acceptStates):
                 matchedGroup = re.match(
                     r'(|[~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)(\w+)(|[ ~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)', word)
-                matchedWord = matchedGroup.group(2)
+                matchedWord = matchedGroup.group(2) # group 2 to get the word without any other special characters
                 tempWord = re.sub(r'[^\w]', ' ', word).strip().casefold()
 
                 stats = {
                     'num': 0,
-                    'type': ''
                 }
 
                 if (outputDict.get(tempWord) is None):
                     outputDict[tempWord] = stats
                 outputDict[tempWord]['num'] += 1
-                if(tempWord in coorConj):
-                    outputDict[tempWord]['type'] = 'Coordinating Conjunction'
-                else:
-                    outputDict[tempWord]['type'] = 'Subcoordinating Conjunction'
                 index = word.find(matchedWord)
                 word = word[:index] + '<b>' + word[index:index +
                                                    len(matchedWord)] + '</b>' + word[index+len(matchedWord):]
