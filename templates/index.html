@@ -2,6 +2,7 @@
 <html>
 <head>
     <link rel="stylesheet" href="static/index.css">
+    <script src="static/index.js"></script>
     <title>Conference Finder DFA</title>
 </head>
 <body>
@@ -16,7 +17,8 @@
         <div>
             <textarea id="inputText" rows="10" cols="100"></textarea>
         </div>
-        <button>Search</button>
+        <button onclick="">Search</button>
+        <a class="search-button" href="{% url 'dataAnalystLogin' %}">Login As Data Analyst</a>
         <hr>
         <p id="output"><b>Output: </b></p>
         <hr>
@@ -42,7 +44,6 @@
             </tbody>
         </table>
         <!-- <script type='text/javascript' src='knockout-3.5.1.js'></script> -->
-        <!-- <script src="../static/index.js"></script> -->
         <br>
     </div>
 </body>
