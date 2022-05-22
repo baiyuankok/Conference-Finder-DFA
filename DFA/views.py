@@ -505,7 +505,7 @@ def processDFA(data):
 
         tempList = list()
 
-        acceptStates = [5, 14, 16, 19, 21, 23, 27, 29, 35, 38]
+        acceptStates = [5, 14, 16, 19, 21, 23, 24, 28, 30, 36, 39, 45, 49, 53, 57]
 
         for word in flattenedList:
             currentState = 0
