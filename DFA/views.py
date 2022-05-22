@@ -488,7 +488,7 @@ def split(string):
 
 def processDFA(request):
     form = DFAForm(request.POST or None)
-    result = ""
+    textStringsData = ""
     msg = ""
     finalOutput = list()
     outputDict = dict()
@@ -499,9 +499,11 @@ def processDFA(request):
             textStringsData = form.cleaned_data['testStrings']
             print("This is test string : ")
             print(textStringsData)
+            splitData = textStringsData.split('\n')
+            splitData = [data + "\n" for data in splitData]
 
             # Preprocessing the strings
-            for lines in textStringsData:
+            for lines in splitData:
                 # split string into list by whitespace
                 line = lines.split(" ")
                 # separate the newline character from words with whitespace
@@ -519,12 +521,15 @@ def processDFA(request):
                         flattenedList.append(i)
 
                 tempList = list()
+                print("Flattened List:  ")
+                print(flattenedList)
 
                 acceptStates = [5, 14, 16, 19, 21, 23, 24, 28, 30, 36, 39, 45, 49, 53, 57]
 
                 for word in flattenedList:
                     currentState = 0
                     for char in word:
+                        print("Why: " + str(currentState))
                         char = char.casefold()
                         if(re.match(r'[~`!@#$%^&()_={}[\]:;,.<>+\/?-]', char) and (currentState == 0 or currentState in acceptStates)):
                             continue
@@ -532,9 +537,14 @@ def processDFA(request):
                         # DFA starts here
                         print("This is char: ")
                         print(char)
-                        currentState = globals()['state' + str(currentState)](char)
+                        print("Current State: " + str(currentState))
+                        # currentState = globals()['state' + str(currentState)](char)
+                        currentState = eval(('state' + str(currentState)) + "(char)")
+                        print("to")
+                        print("Next State: " + str(currentState))
 
                     if (currentState in acceptStates):
+                        print("Successsful")
                         matchedGroup = re.match(
                             r'(|[~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)(\w+)(|[ ~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)', word)
                         matchedWord = matchedGroup.group(2) # group 2 to get the word without any other special characters
@@ -560,18 +570,17 @@ def processDFA(request):
     else:
         form = DFAForm()
 
-
-    print(form)
+    print("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
+    print(finalOutput)
+    print(outputDict)
     context = {
         "form": form,
         'msg': msg,
-        'result': finalOutput
+        'userInput': textStringsData,
+        'result': outputDict
     }
     
-    # html_template = loader.get_template('index.html')
-    # return HttpResponse(html_template.render(context, request))
-    # return HttpResponseRedirect(request.path_info)
-    return render(request, 'index.html', context)
+    return render(request, 'result.html', context)
 
 
 # Main code

@@ -4,5 +4,5 @@ from .views import indexView, processDFA
 urlpatterns = [
     # re_path(r'^$', indexView, name='index'),
     path('', indexView, name='index'),
-    path('', processDFA, name="process_DFA")
+    path('result/', processDFA, name="process_DFA")
 ]

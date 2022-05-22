@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="../static/index.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Conference Finder DFA</title>
+</head>
+<body>
+    <div class="headerBackground headerBackground-fluid mb-5">
+        <div class="container text-center py-5">
+          <!-- <h1 class="text-primary mb-4">Fast &amp; Simple</h1> -->
+          <h1 class="text-white display-3 mb-5">Conference Finder DFA</h1>
+        </div>
+    </div>
+    <div id="content">
+        <p id="input"><b>Input: </b></p>
+        <div id="test-strings"></div>
+        <hr>
+        <p id="output"><b>Output: </b></p>
+        <hr>
+        <p><b>Status:</b> Rejected</p>
+
+        <p><b>Status:</b> Accepted</p>
+        <h3>Statistics</h3>
+        <p>Unique Conjunction Found: <span data-bind="text: uniqueNum"></span></p>
+        <table id="customers">
+            <thead>
+                <tr>
+                    <th>Conjunction Found</th>
+                    <th>Number of Occurrences</th>
+                    <!-- <th>Type of Conjunction</th> -->
+                </tr>
+            </thead>
+            <tbody data-bind="foreach: Object.keys(stats())">
+                <tr>
+                    <td id="Conference Found">1</td>
+                    <!-- <td data-bind="text: $parent.stats()[$data]['num']"></td> -->
+                    <td id="occurenceNum"></td>
+                    <!-- <td data-bind="text: $parent.stats()[$data]['type']"></td> -->
+                </tr>
+            </tbody>
+        </table>
+        <!-- <script type='text/javascript' src='knockout-3.5.1.js'></script> -->
+        <!-- <script src="static/index.js"></script> -->
+        <br>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            userInput = "{{userInput}}"
+            result = "{{result}}"
+            console.log(result);
+            document.getElementById("test-strings").innerHTML = result;
+        });
+
+        // result = "{{result}}"
+        // if (result != "") {
+        //     var occurence_num = document.getElementById("occurenceNum");
+        //     occurence_num = result
+        // }
+    </script>
+</body>
+</html>
