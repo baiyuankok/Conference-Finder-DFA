@@ -1,5 +1,6 @@
 import re
 from django.shortcuts import render
+from DFA.forms import DFAForm
 
 def indexView(request):
     return render(request, 'index.html')
@@ -482,68 +483,87 @@ def split(string):
     return string.split(" ")
 
 
-def processDFA(data):
-    finalOutput = list()
-    outputDict = dict()
-    # Preprocessing the strings
-    for lines in data:
-        # split string into list by whitespace
-        line = lines.split(" ")
-        # separate the newline character from words with whitespace
-        # and
-        # split the separated string into list by whitespace
-        line = [split(i[:-1] + " " + i[-1:])
-                if re.match(r'([^\s]+)\n', i) else i for i in line]
-        flattenedList = []
-        # flatten the list if found nested list
-        for i in line:
-            if isinstance(i, list):
-                for item in i:
-                    flattenedList.append(item)
-            else:
-                flattenedList.append(i)
+def processDFA(request):
+    form = DFAForm(request.POST or None)
+    result = ""
+    if request.method == "POST":
+        form = DFAForm(request.POST)
+        if form.is_valid():
+            textStringsData = list(form.cleaned_data.GET['testStringsField'])
 
-        tempList = list()
+            finalOutput = list()
+            outputDict = dict()
+            # Preprocessing the strings
+            for lines in textStringsData:
+                # split string into list by whitespace
+                line = lines.split(" ")
+                # separate the newline character from words with whitespace
+                # and
+                # split the separated string into list by whitespace
+                line = [split(i[:-1] + " " + i[-1:])
+                        if re.match(r'([^\s]+)\n', i) else i for i in line]
+                flattenedList = []
+                # flatten the list if found nested list
+                for i in line:
+                    if isinstance(i, list):
+                        for item in i:
+                            flattenedList.append(item)
+                    else:
+                        flattenedList.append(i)
 
-        acceptStates = [5, 14, 16, 19, 21, 23, 24, 28, 30, 36, 39, 45, 49, 53, 57]
+                tempList = list()
 
-        for word in flattenedList:
-            currentState = 0
-            for char in word:
-                char = char.casefold()
-                if(re.match(r'[~`!@#$%^&()_={}[\]:;,.<>+\/?-]', char) and (currentState == 0 or currentState in acceptStates)):
-                    continue
+                acceptStates = [5, 14, 16, 19, 21, 23, 24, 28, 30, 36, 39, 45, 49, 53, 57]
 
-                # DFA starts here
-                currentState = locals()['state' + str(currentState)]()
+                for word in flattenedList:
+                    currentState = 0
+                    for char in word:
+                        char = char.casefold()
+                        if(re.match(r'[~`!@#$%^&()_={}[\]:;,.<>+\/?-]', char) and (currentState == 0 or currentState in acceptStates)):
+                            continue
 
-            if (currentState in acceptStates):
-                matchedGroup = re.match(
-                    r'(|[~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)(\w+)(|[ ~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)', word)
-                matchedWord = matchedGroup.group(2) # group 2 to get the word without any other special characters
-                tempWord = re.sub(r'[^\w]', ' ', word).strip().casefold()
+                        # DFA starts here
+                        currentState = locals()['state' + str(currentState)]()
 
-                stats = {
-                    'num': 0,
-                }
+                    if (currentState in acceptStates):
+                        matchedGroup = re.match(
+                            r'(|[~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)(\w+)(|[ ~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)', word)
+                        matchedWord = matchedGroup.group(2) # group 2 to get the word without any other special characters
+                        tempWord = re.sub(r'[^\w]', ' ', word).strip().casefold()
 
-                if (outputDict.get(tempWord) is None):
-                    outputDict[tempWord] = stats
-                outputDict[tempWord]['num'] += 1
-                index = word.find(matchedWord)
-                word = word[:index] + '<b>' + word[index:index +
-                                                   len(matchedWord)] + '</b>' + word[index+len(matchedWord):]
-            tempList.append(word)
-        tempString = " ".join(tempList)
-        finalOutput.append(tempString)
-    finalOutput = " ".join(finalOutput)
-    return finalOutput, outputDict
+                        stats = {
+                            'num': 0,
+                        }
+
+                        if (outputDict.get(tempWord) is None):
+                            outputDict[tempWord] = stats
+                        outputDict[tempWord]['num'] += 1
+                        index = word.find(matchedWord)
+                        word = word[:index] + '<b>' + word[index:index +
+                                                        len(matchedWord)] + '</b>' + word[index+len(matchedWord):]
+                    tempList.append(word)
+                tempString = " ".join(tempList)
+                finalOutput.append(tempString)
+            finalOutput = " ".join(finalOutput)
+            # return finalOutput, outputDict
+        else:
+            msg = "Please provide input string"
+    else:
+        form = DFAForm()
+
+    context = {
+        "form": form,
+        'msg': msg,
+        'result': finalOutput
+    }
+    
+    return render(request, 'index.html', context)
 
 
 # Main code
-def dfa_api(data):
-    splitData = data.split('\n')
-    splitData = [data + "\n" for data in splitData]
-    finalOutput, outputDict = processDFA(splitData)
-    # writeFile(finalOutput, outputDict, len(outputDict))
-    return True
+# def dfa_api(data):
+#     splitData = data.split('\n')
+#     splitData = [data + "\n" for data in splitData]
+#     finalOutput, outputDict = processDFA(splitData)
+#     # writeFile(finalOutput, outputDict, len(outputDict))
+#     return True
