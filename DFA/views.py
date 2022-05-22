@@ -1,9 +1,12 @@
 import re
+from django.template import loader
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from DFA.forms import DFAForm
 
 def indexView(request):
-    return render(request, 'index.html')
+    form = DFAForm(request.POST or None)
+    return render(request, 'index.html', {'form': form})
 
 def state0(input):
     if (input == 'i'):
@@ -486,13 +489,17 @@ def split(string):
 def processDFA(request):
     form = DFAForm(request.POST or None)
     result = ""
+    msg = ""
+    finalOutput = list()
+    outputDict = dict()
+
     if request.method == "POST":
         form = DFAForm(request.POST)
         if form.is_valid():
-            textStringsData = list(form.cleaned_data.GET['testStringsField'])
+            textStringsData = form.cleaned_data['testStrings']
+            print("This is test string : ")
+            print(textStringsData)
 
-            finalOutput = list()
-            outputDict = dict()
             # Preprocessing the strings
             for lines in textStringsData:
                 # split string into list by whitespace
@@ -523,7 +530,9 @@ def processDFA(request):
                             continue
 
                         # DFA starts here
-                        currentState = locals()['state' + str(currentState)]()
+                        print("This is char: ")
+                        print(char)
+                        currentState = globals()['state' + str(currentState)](char)
 
                     if (currentState in acceptStates):
                         matchedGroup = re.match(
@@ -551,12 +560,17 @@ def processDFA(request):
     else:
         form = DFAForm()
 
+
+    print(form)
     context = {
         "form": form,
         'msg': msg,
         'result': finalOutput
     }
     
+    # html_template = loader.get_template('index.html')
+    # return HttpResponse(html_template.render(context, request))
+    # return HttpResponseRedirect(request.path_info)
     return render(request, 'index.html', context)
 
 

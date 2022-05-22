@@ -15,7 +15,8 @@
         <form method="POST" action="{% url 'process_DFA' %}">
             {% csrf_token %}
             <p id="input"><b>Input: </b></p>
-            {{ form.testStringsField }}
+            {{ form.testStrings }}
+            <br>
             <button type="submit" class="btn btn-md btn-primary">Search</button>
         </form>
         
