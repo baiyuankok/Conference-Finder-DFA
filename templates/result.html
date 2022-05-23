@@ -8,20 +8,20 @@
 </head>
 <body>
     <div class="container text-center py-5">
-        <h1 class="text-white display-4 mb-3">Conference Finder DFA</h1>
+        <h1 class="text-white mb-3">Conference Finder DFA</h1>
     </div>
     <div id="resultContainer">
-        <h2>Result: </h2>
-        {{ userInput|safe|linebreaks }}
-        <hr>
         {% if accepted %}
-            <p><b>Status:</b> Accepted</p>
+            <h5>Status: <span style="color: green;">Accepted</span></h5>
         {% else %}
-            <p><b>Status:</b> Rejected</p>
+            <h5>Status: <span style="color: red;">Rejected</span></h5>
         {% endif %}
+        <hr>
+        <h5>Pattern Found (in bold): </h5>
+        <div class="processed-test-strings">{{ userInput|safe|linebreaks }}</div>
+        <hr>
 
-
-        <h3>Statistics</h3>
+        <h5>Findings: </h5>
         <table>
             <thead>
                 <tr>
@@ -37,10 +37,13 @@
                         <td>{{values.occurenceNum}}</td>
                         <td>{{values.position}}</td>
                     </tr>
+                {% empty %}
+                    <tr><td colspan="3">No pattern found...</td></tr>
                 {% endfor %}
             </tbody>
         </table>
         <br>
+        <a class="btn btn-md btn-outline-dark" href="{% url 'index' %}">Search Another Text</a>
     </div>
 
     <script>
