@@ -19,6 +19,10 @@ def state0(input):
     return state
 
 
+def splitString(string):
+    return string.split(" ")
+
+
 def state1(input):
     if (input == 'c'):
         state = 2
@@ -483,102 +487,85 @@ def state100(input): # trap state
     return state
 
 
-def split(string):
-    return string.split(" ")
-
-
 def processDFA(request):
     form = DFAForm(request.POST or None)
-    textStringsData = ""
-    msg = ""
-    startIndex = 0
     accepted = False
-    finalOutput = list()
-    outputDict = dict()
+    processedUserInput = []
+    DFAFindings = dict()
+    acceptStates = [5, 14, 16, 19, 21, 23, 24, 28, 30, 36, 39, 45, 49, 53, 57]
 
     if request.method == "POST":
         form = DFAForm(request.POST)
         if form.is_valid():
-            textStringsData = form.cleaned_data['testStrings']
-            splitData = textStringsData.split('\n')
-            splitData = [data + "\n" for data in splitData]
+            startIndex_originalText = 0
+            testStringsData = form.cleaned_data['testStrings']
+            lineList = testStringsData.split('\n')
+            lineList = [element + "\n" for element in lineList] # Restore the new line character that was split
 
-            print("splitData:")
-            print(splitData)
-            # Preprocessing the strings
-            for lines in splitData:
-                # split string into list by whitespace
-                line = lines.split(" ")
-                # separate the newline character from words with whitespace
-                # and
-                # split the separated string into list by whitespace
-                line = [split(i[:-1] + " " + i[-1:])
-                        if re.match(r'([^\s]+)\n', i) else i for i in line]
-                flattenedList = []
-                # flatten the list if found nested list
-                for i in line:
-                    if isinstance(i, list):
-                        for item in i:
-                            flattenedList.append(item)
+            for line in lineList:
+                stringList = line.split(" ")
+
+                newStringList = []
+                for each in stringList:
+                    if each[-1:-2:-1] == '\n': # if last two char is "\n"
+                        newStringList.append(splitString(each[:-1] + " " + each[-1:]))
                     else:
-                        flattenedList.append(i)
+                        newStringList.append(each)
 
-                tempList = list()
-                print("Flattened List:  ")
-                print(flattenedList)
+                flatList = []
+                for sublist in newStringList:
+                    if isinstance(sublist, list): # if sublist is a list
+                        for element in sublist:
+                            flatList.append(element)
+                    else:
+                        flatList.append(sublist) # if sublist is a string
 
-                acceptStates = [5, 14, 16, 19, 21, 23, 24, 28, 30, 36, 39, 45, 49, 53, 57]
+                tempWordList = []
 
-                for word in flattenedList:
+                for word in flatList:
                     currentState = 0
                     for char in word:
                         char = char.casefold()
-                        if(re.match(r'[~`!@#$%^&()_={}[\]:;,.<>+\/?-]', char) and (currentState == 0 or currentState in acceptStates)):
+                        regex = re.compile(r'[~`!@#$%^&()_={}[\]:;,.<>+\/?-]')
+                        if(regex.search(char) != None and (currentState == 0 or currentState in acceptStates)):
                             continue
 
                         currentState = eval(('state' + str(currentState)) + "(char)")
 
                     if (currentState in acceptStates):
                         accepted = True
-                        matchedGroup = re.match(
+                        # group word by following (1-special char) -> (2-strings) -> (3-special char)
+                        wordGroup = re.match(
                             r'(|[~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)(\w+)(|[ ~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)', word)
-                        matchedWord = matchedGroup.group(2) # group 2 to get the word without any other special characters
+                        pureWord = wordGroup.group(2) # group 2 to get the word without any other special characters
                         tempWord = re.sub(r'[^\w]', ' ', word).strip()
-
                         findings = {
                             'occurenceNum': 0,
                             'position': []
                         }
 
-                        if (outputDict.get(tempWord) is None):
-                            outputDict[tempWord] = findings
+                        if (DFAFindings.get(tempWord) is None):
+                            DFAFindings[tempWord] = findings # create new key
                             
-                        outputDict[tempWord]['occurenceNum'] += 1
-                        occurenceIndexPosition = textStringsData.index(tempWord, startIndex)
-                        outputDict[tempWord]['position'].append(occurenceIndexPosition)
-                        startIndex = occurenceIndexPosition + 1
+                        DFAFindings[tempWord]['occurenceNum'] += 1
+                        occurenceIndexPosition = testStringsData.index(tempWord, startIndex_originalText)
+                        DFAFindings[tempWord]['position'].append(occurenceIndexPosition)
+                        startIndex_originalText = occurenceIndexPosition + 1
 
-                        index = word.find(matchedWord)
-                        word = word[:index] + '<b>' + word[index:index +
-                                                        len(matchedWord)] + '</b>' + word[index+len(matchedWord):]
-                    tempList.append(word)
-                    print("tempList:")
-                    print(tempList)
-                tempString = " ".join(tempList)
-                finalOutput.append(tempString)
-            finalOutput = " ".join(finalOutput)
-
-        else:
-            msg = "Please provide input string"
+                        index_word = word.find(pureWord)
+                        word = word[:index_word] + '<b>' + word[index_word:index_word +
+                                                        len(pureWord)] + '</b>' + word[index_word+len(pureWord):]
+                    tempWordList.append(word)
+                tempText = " ".join(tempWordList)
+                processedUserInput.append(tempText)
+            processedUserInput = " ".join(processedUserInput)
     else:
         form = DFAForm()
 
-    print(outputDict)
     context = {
         "form": form,
-        'msg': msg,
-        'userInput': finalOutput,
-        'output': outputDict,
+        'userInput': processedUserInput,
+        'output': DFAFindings,
         'accepted': accepted
     }
     
