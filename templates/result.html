@@ -13,14 +13,18 @@
         </div>
     </div>
     <div id="content">
-        <p id="input"><b>Input: </b></p>
-        <div id="test-strings"></div>
+        <!-- <p id="input"><b>Input: </b></p> -->
+        <!-- <textarea id="test-strings" rows="10" cols="100" disabled></textarea> -->
+        <p id="output"><b>Result: </b></p>
+        {{ result|safe|linebreaks }}
         <hr>
-        <p id="output"><b>Output: </b></p>
-        <hr>
-        <p><b>Status:</b> Rejected</p>
+        {% if accepted %}
+            <p><b>Status:</b> Accepted</p>
+        {% else %}
+            <p><b>Status:</b> Rejected</p>
+        {% endif %}
 
-        <p><b>Status:</b> Accepted</p>
+
         <h3>Statistics</h3>
         <p>Unique Conjunction Found: <span data-bind="text: uniqueNum"></span></p>
         <table id="customers">
@@ -47,17 +51,12 @@
 
     <script>
         $(document).ready(function() {
-            userInput = "{{userInput}}"
-            result = "{{result}}"
-            console.log(result);
-            document.getElementById("test-strings").innerHTML = result;
+            accepted = "{{accepted}}";
+            console.log(accepted);
+            // document.getElementById("test-strings").value = result;
         });
 
-        // result = "{{result}}"
-        // if (result != "") {
-        //     var occurence_num = document.getElementById("occurenceNum");
-        //     occurence_num = result
-        // }
+
     </script>
 </body>
 </html>

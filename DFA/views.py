@@ -490,6 +490,7 @@ def processDFA(request):
     form = DFAForm(request.POST or None)
     textStringsData = ""
     msg = ""
+    accepted = False
     finalOutput = list()
     outputDict = dict()
 
@@ -497,8 +498,6 @@ def processDFA(request):
         form = DFAForm(request.POST)
         if form.is_valid():
             textStringsData = form.cleaned_data['testStrings']
-            print("This is test string : ")
-            print(textStringsData)
             splitData = textStringsData.split('\n')
             splitData = [data + "\n" for data in splitData]
 
@@ -529,22 +528,14 @@ def processDFA(request):
                 for word in flattenedList:
                     currentState = 0
                     for char in word:
-                        print("Why: " + str(currentState))
                         char = char.casefold()
                         if(re.match(r'[~`!@#$%^&()_={}[\]:;,.<>+\/?-]', char) and (currentState == 0 or currentState in acceptStates)):
                             continue
 
-                        # DFA starts here
-                        print("This is char: ")
-                        print(char)
-                        print("Current State: " + str(currentState))
-                        # currentState = globals()['state' + str(currentState)](char)
                         currentState = eval(('state' + str(currentState)) + "(char)")
-                        print("to")
-                        print("Next State: " + str(currentState))
 
                     if (currentState in acceptStates):
-                        print("Successsful")
+                        accepted = True
                         matchedGroup = re.match(
                             r'(|[~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)(\w+)(|[ ~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)', word)
                         matchedWord = matchedGroup.group(2) # group 2 to get the word without any other special characters
@@ -564,29 +555,19 @@ def processDFA(request):
                 tempString = " ".join(tempList)
                 finalOutput.append(tempString)
             finalOutput = " ".join(finalOutput)
-            # return finalOutput, outputDict
+
         else:
             msg = "Please provide input string"
     else:
         form = DFAForm()
 
-    print("HEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE")
-    print(finalOutput)
     print(outputDict)
     context = {
         "form": form,
         'msg': msg,
         'userInput': textStringsData,
-        'result': outputDict
+        'result': finalOutput,
+        'accepted': accepted
     }
     
     return render(request, 'result.html', context)
-
-
-# Main code
-# def dfa_api(data):
-#     splitData = data.split('\n')
-#     splitData = [data + "\n" for data in splitData]
-#     finalOutput, outputDict = processDFA(splitData)
-#     # writeFile(finalOutput, outputDict, len(outputDict))
-#     return True
