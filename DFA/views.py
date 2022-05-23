@@ -1,4 +1,5 @@
 import re
+from turtle import position
 from django.template import loader
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
@@ -490,6 +491,7 @@ def processDFA(request):
     form = DFAForm(request.POST or None)
     textStringsData = ""
     msg = ""
+    startIndex = 0
     accepted = False
     finalOutput = list()
     outputDict = dict()
@@ -501,6 +503,8 @@ def processDFA(request):
             splitData = textStringsData.split('\n')
             splitData = [data + "\n" for data in splitData]
 
+            print("splitData:")
+            print(splitData)
             # Preprocessing the strings
             for lines in splitData:
                 # split string into list by whitespace
@@ -539,19 +543,27 @@ def processDFA(request):
                         matchedGroup = re.match(
                             r'(|[~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)(\w+)(|[ ~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)', word)
                         matchedWord = matchedGroup.group(2) # group 2 to get the word without any other special characters
-                        tempWord = re.sub(r'[^\w]', ' ', word).strip().casefold()
+                        tempWord = re.sub(r'[^\w]', ' ', word).strip()
 
-                        stats = {
-                            'num': 0,
+                        findings = {
+                            'occurenceNum': 0,
+                            'position': []
                         }
 
                         if (outputDict.get(tempWord) is None):
-                            outputDict[tempWord] = stats
-                        outputDict[tempWord]['num'] += 1
+                            outputDict[tempWord] = findings
+                            
+                        outputDict[tempWord]['occurenceNum'] += 1
+                        occurenceIndexPosition = textStringsData.index(tempWord, startIndex)
+                        outputDict[tempWord]['position'].append(occurenceIndexPosition)
+                        startIndex = occurenceIndexPosition + 1
+
                         index = word.find(matchedWord)
                         word = word[:index] + '<b>' + word[index:index +
                                                         len(matchedWord)] + '</b>' + word[index+len(matchedWord):]
                     tempList.append(word)
+                    print("tempList:")
+                    print(tempList)
                 tempString = " ".join(tempList)
                 finalOutput.append(tempString)
             finalOutput = " ".join(finalOutput)
@@ -565,8 +577,8 @@ def processDFA(request):
     context = {
         "form": form,
         'msg': msg,
-        'userInput': textStringsData,
-        'result': finalOutput,
+        'userInput': finalOutput,
+        'output': outputDict,
         'accepted': accepted
     }
     

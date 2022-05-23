@@ -2,22 +2,19 @@
 <html>
 <head>
     <link rel="stylesheet" href="static/index.css"/>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <title>Conference Finder DFA</title>
 </head>
 <body>
-    <div class="headerBackground headerBackground-fluid mb-5">
-        <div class="container text-center py-5">
-          <!-- <h1 class="text-primary mb-4">Fast &amp; Simple</h1> -->
-          <h1 class="text-white display-3 mb-5">Conference Finder DFA</h1>
-        </div>
+    <div class="container text-center py-5">
+        <h1 class="text-white display-4 mb-3">Conference Finder DFA</h1>
     </div>
-    <div id="content">
+    <div id="resultContainer" class="text-center">
         <form method="POST" action="{% url 'process_DFA' %}">
             {% csrf_token %}
-            <p id="input"><b>Input: </b></p>
             {{ form.testStrings }}
             <br>
-            <button type="submit" class="btn btn-md btn-primary">Search</button>
+            <button type="submit" class="btn btn-md btn-outline-dark">Search</button>
         </form>
         <br>
     </div>
