@@ -412,6 +412,14 @@ def state47(input):
     return state
 
 
+def state48(input):
+    if (input == 'b'):
+        state = 49
+    else:
+        state = 100
+    return state
+
+
 def state49(input):
     if (input):
         state = 100
