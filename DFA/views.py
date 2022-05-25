@@ -1,7 +1,4 @@
 import re
-from turtle import position
-from django.template import loader
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from DFA.forms import DFAForm
 
@@ -481,7 +478,8 @@ def state57(input):
     return state
 
 
-def state100(input): # trap state
+# Trap state
+def state100(input):
     if(input):
         state = 100
     return state
@@ -499,65 +497,85 @@ def processDFA(request):
         if form.is_valid():
             startIndex_originalText = 0
             testStringsData = form.cleaned_data['testStrings']
+
+            # Split the line into list and restore the new line character that was split
             lineList = testStringsData.split('\n')
-            lineList = [element + "\n" for element in lineList] # Restore the new line character that was split
+            lineList = [element + "\n" for element in lineList]
 
             for line in lineList:
                 stringList = line.split(" ")
 
                 newStringList = []
                 for each in stringList:
-                    if each[-1:-2:-1] == '\n': # if last two char is "\n"
+                    # Check whether the last two char are '\n'
+                    if each[-1:-2:-1] == '\n':
                         newStringList.append(splitString(each[:-1] + " " + each[-1:]))
                     else:
                         newStringList.append(each)
 
                 flatList = []
                 for sublist in newStringList:
-                    if isinstance(sublist, list): # if sublist is a list
+                    # Check whether the sublist is a list
+                    if isinstance(sublist, list):
                         for element in sublist:
                             flatList.append(element)
                     else:
-                        flatList.append(sublist) # if sublist is a string
+                        flatList.append(sublist)
 
-                tempWordList = []
+                wordList = []
 
                 for word in flatList:
                     currentState = 0
                     for char in word:
+                        # Change all the char to lower case
                         char = char.casefold()
+
+                        # Skip the DFA traversal if the char is special char or currentState conditions are met
                         regex = re.compile(r'[~`!@#$%^&()_={}[\]:;,.<>+\/?-]')
                         if(regex.search(char) != None and (currentState == 0 or currentState in acceptStates)):
                             continue
 
+                        # DFA traversal on char
                         currentState = eval(('state' + str(currentState)) + "(char)")
 
                     if (currentState in acceptStates):
                         accepted = True
-                        # group word by following (1-special char) -> (2-strings) -> (3-special char)
-                        wordGroup = re.match(
-                            r'(|[~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)(\w+)(|[ ~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)', word)
-                        pureWord = wordGroup.group(2) # group 2 to get the word without any other special characters
+
+                        # Group word by following (1-special char) -> (2-strings) -> (3-special char)
+                        wordGroup = re.match(r'(|[~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)(\w+)(|[ ~`!@#$%^&()_={}[\]:;,.<>+\/?-]+)', word)
+                        
+                        # Obtain the word from group 2
+                        pureWord = wordGroup.group(2)
                         tempWord = re.sub(r'[^\w]', ' ', word).strip()
                         findings = {
                             'occurenceNum': 0,
                             'position': []
                         }
 
+                        # Create new key if not the word is not in the list
                         if (DFAFindings.get(tempWord) is None):
-                            DFAFindings[tempWord] = findings # create new key
+                            DFAFindings[tempWord] = findings
                             
+                        # Assign occurenceNum and index position for each key
                         DFAFindings[tempWord]['occurenceNum'] += 1
                         occurenceIndexPosition = testStringsData.index(tempWord, startIndex_originalText)
                         DFAFindings[tempWord]['position'].append(occurenceIndexPosition)
                         startIndex_originalText = occurenceIndexPosition + 1
 
-                        index_word = word.find(pureWord)
-                        word = word[:index_word] + '<b>' + word[index_word:index_word +
-                                                        len(pureWord)] + '</b>' + word[index_word+len(pureWord):]
-                    tempWordList.append(word)
-                tempText = " ".join(tempWordList)
-                processedUserInput.append(tempText)
+                        # Assign boldface on the pattern found
+                        indexPosition = word.find(pureWord)
+                        word = word[:indexPosition] + '<b>' + word[indexPosition:indexPosition + len(pureWord)] + '</b>' + word[indexPosition+len(pureWord):]
+
+                    # Store each (accepted & rejected) processed word in list
+                    wordList.append(word)
+
+                # Convert the list to a string
+                wordListText = " ".join(wordList)
+
+                # Store the converted string to list
+                processedUserInput.append(wordListText)
+
+            # Convert the list to a string (final output)
             processedUserInput = " ".join(processedUserInput)
     else:
         form = DFAForm()
