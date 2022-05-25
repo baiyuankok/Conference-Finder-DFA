@@ -6,6 +6,11 @@ def indexView(request):
     form = DFAForm(request.POST or None)
     return render(request, 'index.html', {'form': form})
 
+
+def splitString(string):
+    return string.split(" ")
+    
+
 def state0(input):
     if (input == 'i'):
         state = 1
@@ -14,10 +19,6 @@ def state0(input):
     else:
         state = 100 # state 100 serves as the trap state
     return state
-
-
-def splitString(string):
-    return string.split(" ")
 
 
 def state1(input):
