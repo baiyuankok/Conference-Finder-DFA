@@ -8,3 +8,9 @@ Features:
 
 The DFA recognises the following 19 patterns (which was retrieved from [International Conferences in Malaysia 2022 & 2023](https://www.allconferencealert.com/malaysia.html?srh=1&searchtopic=&searchcountry=&searchmonth=&searchcity=Kuala%20Lumpur&searchdate=&page=2)):<br>
 ICMBS, ICITS, ICIRPEBS, ICBAES, ICBMSS, ICEABT, ICEFR, ICCSNS, ICCSPEE, ICCSIEE, ICCBEE, ICAASS, ICAPM, ICAIMLBDE, ICAIRME, EUICNB, EUIC3BCB, EUIWNMC, EUCELS
+
+## Install
+
+Download the whole project to use
+
+Python 3 and Django should be installed
